@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  loadbalancer:
+    build: ./nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html/frontend
+    depends_on:
+      - core-service
+      - math-service
+
+
+  core-service:
+    image: alpine
+    command: /bin/core-service
+    volumes:
+      - ./bin/core-service:/bin/core-service
+    expose:
+      - "80"
+    stdin_open: true
+    tty: true
+
+  math-service:
+    image: alpine
+    command: /bin/math-service
+    volumes:
+      - ./bin/math-service:/bin/math-service
+    expose:
+      - "80"
+    stdin_open: true
+    tty: true
